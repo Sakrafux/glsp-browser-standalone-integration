@@ -57,7 +57,7 @@ export namespace WorkflowSerializer {
                     result.nodes.activities!.push(transformChild(child) as ActivityModelNode);
                     break;
                 }
-                case 'edge': {
+                case ModelTypes.EDGE: {
                     result.edges.simple!.push(transformChild(child) as SimpleModelEdge);
                     break;
                 }
@@ -157,7 +157,7 @@ export namespace WorkflowSerializer {
                     activities: child.children.filter(c => c.type.startsWith(ModelTypes.ACTIVITY_NODE)).map(c => transformChild(c))
                 } as StructModelElement;
             }
-            case 'edge': {
+            case ModelTypes.EDGE: {
                 const element = child as GEdge;
                 return {
                     id: element.id,

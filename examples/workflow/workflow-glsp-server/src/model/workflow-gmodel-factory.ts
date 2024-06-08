@@ -185,7 +185,7 @@ export class WorkflowGModelFactory implements GModelFactory {
     protected createSimpleEdge(edge: SimpleModelEdge): GEdge {
         return GEdge.builder()
             .id(edge.id)
-            .type('edge')
+            .type(ModelTypes.EDGE)
             .addRoutingPoints(edge.routingPoints)
             .sourceId(edge.sourceId)
             .targetId(edge.targetId)

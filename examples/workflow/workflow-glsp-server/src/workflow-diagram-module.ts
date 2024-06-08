@@ -24,6 +24,7 @@ import {
     GLSPServer,
     GModelDiagramModule,
     GModelFactory,
+    GModelIndex,
     InstanceMultiBinding,
     LabelEditValidator,
     ModelState,
@@ -64,6 +65,7 @@ import { WorkflowPopupFactory } from './workflow-popup-factory';
 import { WorkflowModelState } from './model/workflow-model-state';
 import { WorkflowModelStorage } from './model/workflow-storage';
 import { WorkflowGModelFactory } from './model/workflow-gmodel-factory';
+import { WorkflowModelIndex } from './model/workflow-model-index';
 
 @injectable()
 export class WorkflowServerModule extends ServerModule {
@@ -102,6 +104,11 @@ export class WorkflowDiagramModule extends GModelDiagramModule {
 
     protected override bindGModelFactory(): BindingTarget<GModelFactory> {
         return WorkflowGModelFactory;
+    }
+
+    protected override bindGModelIndex(): BindingTarget<GModelIndex> {
+        this.context.bind(WorkflowModelIndex).toSelf().inSingletonScope();
+        return { service: WorkflowModelIndex };
     }
 
     protected bindDiagramConfiguration(): BindingTarget<DiagramConfiguration> {

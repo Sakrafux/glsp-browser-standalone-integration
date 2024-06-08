@@ -15,7 +15,7 @@
  * SPDX-License-Identifier: EPL-2.0 OR GPL-2.0 WITH Classpath-exception-2.0 OR MIT
  ********************************************************************************/
 
-export interface WorkflowModel {
+export class WorkflowModel {
     id: string;
     nodes: {
         tasks?: TaskModelNode[];
@@ -28,10 +28,11 @@ export interface WorkflowModel {
     categories?: CategoryModelNode[];
 }
 
-export interface ModelElement {}
-
-export interface CategoryModelNode extends ModelElement {
+export class ModelElement {
     id: string;
+}
+
+export class CategoryModelNode extends ModelElement {
     type: string;
     name: string;
     position: { x: number; y: number };
@@ -39,8 +40,7 @@ export interface CategoryModelNode extends ModelElement {
     children?: (StructModelElement | CompHeaderModelElement)[];
 }
 
-export interface TaskModelNode extends ModelElement {
-    id: string;
+export class TaskModelNode extends ModelElement {
     type: string;
     name: string;
     position: { x: number; y: number };
@@ -48,50 +48,47 @@ export interface TaskModelNode extends ModelElement {
     children?: (IconModelElement | LabelModelElement)[];
 }
 
-export interface ModelSubElement extends ModelElement {
-    id: string;
+export class ModelSubElement extends ModelElement {
     type: string;
     position: { x: number; y: number };
     size?: { width: number; height: number };
 }
 
-export interface IconModelElement extends ModelSubElement {}
+export class IconModelElement extends ModelSubElement {}
 
-export interface LabelModelElement extends ModelSubElement {
+export class LabelModelElement extends ModelSubElement {
     alignment: { x: number; y: number };
     text: string;
 }
 
-export interface CompHeaderModelElement extends ModelSubElement {
+export class CompHeaderModelElement extends ModelSubElement {
     label: LabelModelElement;
 }
 
-export interface StructModelElement extends ModelSubElement {
+export class StructModelElement extends ModelSubElement {
     tasks?: TaskModelNode[];
     activities?: ActivityModelNode[];
 }
 
-export interface ActivityModelNode extends ModelElement {
-    id: string;
+export class ActivityModelNode extends ModelElement {
     type: string;
     position: { x: number; y: number };
     size?: { width: number; height: number };
 }
 
-export interface SimpleModelEdge extends ModelElement {
+export class SimpleModelEdge extends ModelElement {
     routingPoints: RoutingPointModelElement[];
-    id: string;
     sourceId: string;
     targetId: string;
 }
 
-export interface RoutingPointModelElement extends ModelElement {
+export class RoutingPointModelElement extends ModelElement {
     kind: string;
     x: number;
     y: number;
     pointIndex: number;
 }
 
-export interface WeightedModelEdge extends SimpleModelEdge {
+export class WeightedModelEdge extends SimpleModelEdge {
     probabilty?: string;
 }

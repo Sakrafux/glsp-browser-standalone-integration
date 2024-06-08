@@ -13,32 +13,27 @@
  *
  * SPDX-License-Identifier: EPL-2.0 OR GPL-2.0 WITH Classpath-exception-2.0
  ********************************************************************************/
-import {
-    CreateNodeOperation,
-    GCompartment,
-    GModelCreateNodeOperationHandler,
-    GModelElement,
-    ModelState,
-    Point
-} from '@eclipse-glsp/server';
+import { CreateNodeOperation, JsonCreateNodeOperationHandler, Point } from '@eclipse-glsp/server';
 import { inject, injectable } from 'inversify';
-import { Category } from '../graph-extension';
 import { ModelTypes } from '../util/model-types';
 import { GridSnapper } from './grid-snapper';
+import { CategoryModelNode, ModelElement, StructModelElement } from '../model/workflow-model';
+import { WorkflowModelState } from '../model/workflow-model-state';
 
 @injectable()
-export abstract class CreateWorkflowNodeOperationHandler extends GModelCreateNodeOperationHandler {
-    @inject(ModelState)
-    protected override modelState: ModelState;
+export abstract class CreateWorkflowNodeOperationHandler extends JsonCreateNodeOperationHandler {
+    @inject(WorkflowModelState)
+    protected override modelState: WorkflowModelState;
 
     override getLocation(operation: CreateNodeOperation): Point | undefined {
         return GridSnapper.snap(operation.location);
     }
 
-    override getContainer(operation: CreateNodeOperation): GModelElement | undefined {
-        const container = super.getContainer(operation);
+    override getContainer(operation: CreateNodeOperation): ModelElement | undefined {
+        const index = this.modelState.index;
+        const container = operation.containerId ? index.getWorkflowElement(operation.containerId) : undefined;
 
-        if (container instanceof Category) {
+        if (container instanceof CategoryModelNode) {
             const structComp = this.getCategoryCompartment(container);
             if (structComp) {
                 return structComp;
@@ -47,10 +42,7 @@ export abstract class CreateWorkflowNodeOperationHandler extends GModelCreateNod
         return container;
     }
 
-    getCategoryCompartment(category: Category): GCompartment | undefined {
-        return category.children
-            .filter(child => child instanceof GCompartment)
-            .map(child => child as GCompartment)
-            .find(comp => ModelTypes.STRUCTURE === comp.type);
+    getCategoryCompartment(category: CategoryModelNode): StructModelElement | undefined {
+        return category.children?.find(child => child.type === ModelTypes.STRUCTURE);
     }
 }

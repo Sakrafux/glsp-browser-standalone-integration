@@ -15,11 +15,15 @@
  * SPDX-License-Identifier: EPL-2.0 OR GPL-2.0 WITH Classpath-exception-2.0 OR MIT
  ********************************************************************************/
 import { DefaultModelState } from '@eclipse-glsp/server';
-import { injectable } from 'inversify';
+import { inject, injectable } from 'inversify';
 import { WorkflowModel } from './workflow-model';
+import { WorkflowModelIndex } from './workflow-model-index';
 
 @injectable()
 export class WorkflowModelState extends DefaultModelState {
+    @inject(WorkflowModelIndex)
+    override index: WorkflowModelIndex;
+
     protected rawModel: WorkflowModel;
 
     get sourceModel(): WorkflowModel {
@@ -28,5 +32,6 @@ export class WorkflowModelState extends DefaultModelState {
 
     updateSourceModel(workflowModel: WorkflowModel): void {
         this.rawModel = workflowModel;
+        this.index.indexWorkflow(workflowModel);
     }
 }

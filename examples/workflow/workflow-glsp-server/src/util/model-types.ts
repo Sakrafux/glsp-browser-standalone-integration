@@ -19,6 +19,7 @@ export namespace ModelTypes {
     export const LABEL_TEXT = 'label:text';
     export const COMP_HEADER = 'comp:header';
     export const LABEL_ICON = 'label:icon';
+    export const EDGE = 'edge';
     export const WEIGHTED_EDGE = 'edge:weighted';
     export const ICON = 'icon';
     export const ACTIVITY_NODE = 'activityNode';
